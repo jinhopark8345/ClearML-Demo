@@ -13,11 +13,8 @@ from ray.tune.logger import pretty_print
 
 
 def run_demo(config):
-
-    task = Task.init(project_name='ray', task_name='ray_demo')
+    task = Task.init(project_name='ray', task_name='ray_demo', auto_connect_frameworks={"tensorboard": True})
     params = task.connect(config)
-
-
     algo = (
         PPOConfig()
         .rollouts(num_rollout_workers=config.a)
@@ -28,7 +25,6 @@ def run_demo(config):
 
     for i in range(10):
         result = algo.train()
-        # print(pretty_print(result))
 
         if i % 5 == 0:
             checkpoint_dir = algo.save().checkpoint.path
